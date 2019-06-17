@@ -19,9 +19,11 @@ module.exports = {
           : false
       }
     },
-    launch: (_, { id }, { dataSources }) =>
-      dataSources.launchAPI.getLaunchById({ launchId: id }),
-    me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser()
+    launch: async (_, { id }, { dataSources }) => {
+      return await dataSources.launchAPI.getLaunchById({ launchId: id })
+    },
+    me: async (_, __, { dataSources }) =>
+      await dataSources.userAPI.findOrCreateUser()
   },
   Mutation: {
     bookTrips: async (_, { launchIds }, { dataSources }) => {
@@ -70,15 +72,14 @@ module.exports = {
     }
   },
   Launch: {
-    isBooked: (launch, _, { dataSources }) => {
-      dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id })
-    }
+    isBooked: async (launch, _, { dataSources }) =>
+      await dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id })
   },
   User: {
-    trips: (_, __, { dataSources }) => {
-      const launchIds = dataSources.userAPI.getLaunchIdByUser()
+    trips: async (_, __, { dataSources }) => {
+      const launchIds = await dataSources.userAPI.getLaunchIdByUser()
       if (!launchIds.length) return []
-      return dataSources.launchAPI.getLaunchesByIds({ launchIds }) || []
+      return (await dataSources.launchAPI.getLaunchesByIds({ launchIds })) || []
     }
   }
 }

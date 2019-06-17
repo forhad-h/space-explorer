@@ -2,7 +2,7 @@ const { DataSource } = require('apollo-datasource')
 const isEmail = require('isemail')
 
 class UserAPI extends DataSource {
-  constructor ({store}) {
+  constructor ({ store }) {
     super()
     this.store = store
   }
@@ -33,7 +33,6 @@ class UserAPI extends DataSource {
       const res = await this.bookTrip({ launchId })
       if (res) results.push(res)
     }
-
     return results
   }
 
@@ -64,7 +63,6 @@ class UserAPI extends DataSource {
     const found = await this.store.trips.findAll({
       where: { userId, launchId }
     })
-
     return found && found.length > 0
   }
 }
